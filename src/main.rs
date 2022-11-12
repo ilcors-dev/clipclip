@@ -1,10 +1,8 @@
 use chrono::Local;
+use enigo::{Enigo, KeyboardControllable};
 use porcupine::{Porcupine, PorcupineBuilder};
 use pv_recorder::RecorderBuilder;
-use std::{
-    env,
-    sync::atomic::{AtomicBool, Ordering},
-};
+use std::sync::atomic::{AtomicBool, Ordering};
 
 static LISTENING: AtomicBool = AtomicBool::new(false);
 
@@ -20,6 +18,8 @@ fn run(
     keyword_paths: Vec<String>,
     model_path: String,
 ) {
+    let mut enigo = Enigo::new();
+
     let porcupine: Porcupine =
         PorcupineBuilder::new_with_keyword_paths(access_key, keyword_paths.as_slice())
             .model_path(model_path)
@@ -48,8 +48,10 @@ fn run(
 
         let keyword_index = porcupine.process(&pcm).unwrap();
         if keyword_index >= 0 {
-            println!("[{}] Detected!", Local::now().format("%F %T"));
-            println!("clippo");
+            println!("[{}] clippo!", Local::now().format("%F %T"));
+            enigo.key_down(enigo::Key::Alt);
+            enigo.key_click(enigo::Key::F10);
+            enigo.key_up(enigo::Key::Alt);
         }
     }
 

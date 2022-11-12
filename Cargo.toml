@@ -11,3 +11,4 @@ pv_recorder = "*"
 ctrlc = "*"
 chrono = "*"
 dotenv_codegen = "*"
+enigo = { path = "./enigo", version = "0.0.14"}
